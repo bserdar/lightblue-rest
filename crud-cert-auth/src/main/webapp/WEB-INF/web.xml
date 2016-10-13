@@ -67,6 +67,9 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
   <listener>
     <listener-class>com.redhat.lightblue.rest.cors.CorsInitializingServletContextListener</listener-class>
   </listener>
+  <listener>
+    <listener-class>com.redhat.lightblue.rest.crud.AsynchListener</listener-class>
+  </listener>
 
   <context-param>
     <param-name>cors.configuration.resource</param-name>

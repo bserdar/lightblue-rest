@@ -53,6 +53,8 @@ import com.redhat.lightblue.rest.crud.cmd.ReleaseCommand;
 import com.redhat.lightblue.rest.crud.cmd.SaveCommand;
 import com.redhat.lightblue.rest.crud.cmd.UpdateCommand;
 import com.redhat.lightblue.rest.crud.cmd.ExplainCommand;
+import com.redhat.lightblue.rest.crud.cmd.ScheduleAsynchCommand;
+import com.redhat.lightblue.rest.crud.cmd.AsynchStatusCommand;
 import com.redhat.lightblue.rest.util.QueryTemplateUtils;
 import com.redhat.lightblue.util.Error;
 import com.redhat.lightblue.util.JsonUtils;
@@ -266,6 +268,23 @@ public abstract class AbstractCrudResource {
     public Response bulk(String request) {
         Error.reset();
         CallStatus st = new BulkRequestCommand(request).run();
+        return Response.status(st.getHttpStatus()).entity(st.toString()).build();
+    }
+
+    @POST
+    @LZF
+    @Path("/async")
+    public Response scheduleAsynch(String request) {
+        Error.reset();
+        CallStatus st = new ScheduleAsynchCommand(request).run();
+        return Response.status(st.getHttpStatus()).entity(st.toString()).build();        
+    }
+
+    @GET
+    @Path("/async/{jobId}")
+    public Response getAsynchStatus(@PathParam("jobId") String jobId) {
+        Error.reset();
+        CallStatus st = new AsynchStatusCommand(jobId).run();
         return Response.status(st.getHttpStatus()).entity(st.toString()).build();
     }
 

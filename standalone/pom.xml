@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Copyright 2013 Red Hat, Inc. and/or its affiliates.
+
+This file is part of lightblue.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses />.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.redhat.lightblue.rest</groupId>
+    <artifactId>lightblue-rest-pom</artifactId>
+    <version>2.22.0-SNAPSHOT</version>
+  </parent>
+  <repositories>
+    <repository>
+      <id>jetty</id>
+      <url>http://central.maven.org/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <artifactId>lightblue-rest-standalone</artifactId>
+  <packaging>jar</packaging>
+  <name>lightblue-rest standalone server: ${project.groupId}|${project.artifactId}</name>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-project</artifactId>
+        <version>9.4.6.v20170531</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+   <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-servlet-initializer</artifactId>
+      <version>3.0.4.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-multipart-provider</artifactId>
+      <version>3.0.4.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jsapi</artifactId>
+      <version>3.0.4.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jdk-http</artifactId>
+      <version>3.0.4.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jaxrs</artifactId>
+      <version>3.0.4.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jackson-provider</artifactId>
+      <version>3.0.4.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+      <version>9.4.6.v20170531</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-webapp</artifactId>
+      <version>9.4.6.v20170531</version>
+    </dependency>
+    <dependency>
+      <groupId>org.esbtools.lightblue-notification-hook</groupId>
+      <artifactId>lightblue-notification-hook</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.codeablereason.restcompress.provider</groupId>
+      <artifactId>rest-compress-lib</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.redhat.lightblue</groupId>
+      <artifactId>lightblue-core-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.redhat.lightblue</groupId>
+      <artifactId>lightblue-core-config</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.redhat.lightblue.hook</groupId>
+      <artifactId>lightblue-audit-hook</artifactId>
+      <scope>test</scope>
+      <!-- TODO: Testing the audit hook should not be done in the lightblue-rest project -->
+    </dependency>
+    <dependency>
+      <groupId>com.redhat.lightblue.rest</groupId>
+      <artifactId>lightblue-rest-common</artifactId>
+      <exclusions>
+        <!-- weld-servlet contains its own copies (!!) of slf4j logger API and a binding.
+             This must be excluded to prevent classpath issues, especially with the
+             embedded test servlet container. -->
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.redhat.lightblue.mongo</groupId>
+      <artifactId>lightblue-mongo</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.redhat.lightblue.mongo</groupId>
+      <artifactId>lightblue-mongo-test</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>com.redhat.lightblue.rest.Main</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id> 
+            <phase>package</phase> 
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>  
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.0</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <profiles>
+  </profiles>
+</project>
+  
